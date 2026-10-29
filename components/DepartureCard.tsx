@@ -2,6 +2,8 @@ import { StyleSheet, Text, View } from 'react-native';
 
 import { RouteNumber } from '@/src/domain/value-objects/RouteNumber';
 
+import { DelayHighlight } from './DelayHighlight';
+
 interface DepartureCardProps {
   routeId: number | string;
   headsign: string;
@@ -16,7 +18,6 @@ export default function DepartureCard({
   delayInSeconds,
 }: DepartureCardProps) {
   const routeNumber = new RouteNumber(routeId);
-  const isDelayed = delayInSeconds !== null && delayInSeconds > 0;
 
   return (
     <View style={styles.cardContainer}>
@@ -25,10 +26,10 @@ export default function DepartureCard({
       </View>
       <View style={styles.infoContainer}>
         <Text style={styles.headsign}>{headsign}</Text>
-        <Text style={styles.timeText}>
-          Planowo: {theoreticalTime}{' '}
-          {isDelayed ? <Text style={styles.delayText}>(+{delayInSeconds}s)</Text> : null}
-        </Text>
+        <View style={styles.timeRow}>
+          <Text style={styles.timeText}>Planowo: {theoreticalTime} • </Text>
+          <DelayHighlight delayInSeconds={delayInSeconds} />
+        </View>
       </View>
     </View>
   );
@@ -69,13 +70,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#374151',
   },
+  timeRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginTop: 4,
+  },
   timeText: {
     fontSize: 12,
     color: '#6B7280',
-    marginTop: 4,
-  },
-  delayText: {
-    color: '#DC2626',
-    fontWeight: 'bold',
   },
 });
